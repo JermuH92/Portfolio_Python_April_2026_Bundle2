@@ -5,14 +5,16 @@ def debug_logger(func):
 
         result = func(data)
         print(f"Result: {result}")
-        
+
         return result
     
     return wrapper
 
+@debug_logger
 def trim_whitespace(data):
     return data.strip()
 
+@debug_logger
 def to_lowercase(data):
     return data.lower()
 
@@ -23,6 +25,7 @@ def remove_character(char_to_remove):
 
     return inner_func
 
+@debug_logger
 def replace_with_dashes(data):
     split = data.split(" ")
     return "-".join(split)
