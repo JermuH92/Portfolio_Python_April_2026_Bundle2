@@ -1,19 +1,10 @@
-def tokenize_text(raw_text):
-    tokens = []
-  
-    bold_split = raw_text.split('**')
+def parse_markdown_to_html(raw_text):
+    current_nodes = [{"type": "text", "value": raw_text}]
+    current_nodes = split_nodes_delimiter(current_nodes, "**", "bold")
+    current_nodes = split_nodes_delimiter(current_nodes, "*", "italic")
+    current_nodes = split_nodes_delimiter(current_nodes, "`", "code")
 
-    for index, value in enumerate(bold_split):
-        if value == "":
-            continue
-
-        if index % 2 != 0:
-            tokens.append({"type": "bold", "value": value})
-        else:
-            tokens.append({"type": "text", "value": value})
-
-    return tokens
-
+    return generate_html(current_nodes)
 
 def split_nodes_delimiter(old_nodes, delimiter, text_type):
     new_nodes = []
@@ -38,15 +29,18 @@ def split_nodes_delimiter(old_nodes, delimiter, text_type):
     return new_nodes
 
 
-def generate_html(tokens):
+def generate_html(current_nodes):
     html_output = ""
 
-    for token in tokens:
+    for token in current_nodes:
         if token["type"] == "bold":
             html_output += "<b>" + token["value"] + "</b>"
         
         elif token["type"] == "italic":
             html_output += "<i>" + token["value"] + "</i>"
+        
+        elif token["type"] == "code":
+            html_output += "<codespan>" + token["value"] + "</codespan>"
 
         else:
             html_output += token["value"]
@@ -54,14 +48,9 @@ def generate_html(tokens):
     return html_output
 
 
-# test_text = "Hey **Jere**, are you ready to **code** today?"
-test_text2 = "This **paragraph** tests if *italic* and bold chaining works in the code."
 
-step_one_tokens = tokenize_text(test_text2)
-print("Step one (Bolds) found:", step_one_tokens)
+test_text2 = "This **paragraph** tests if *italic* and bold chaining works in the `code`."
 
-step_two_tokens = split_nodes_delimiter(step_one_tokens, "*", "italic")
-print("Step two (Cursives) found:", step_two_tokens)
+final_html = parse_markdown_to_html(test_text2)
 
-final_html = generate_html(step_two_tokens)
 print("HTML ready output: ", final_html)
