@@ -14,16 +14,6 @@ def tokenize_text(raw_text):
 
     return tokens
 
-def generate_html(tokens):
-    html_output = ""
-
-    for token in tokens:
-        if token["type"] == "bold":
-            html_output += "<b>" + token["value"] + "</b>"
-        else:
-            html_output += token["value"]
-    
-    return html_output
 
 def split_nodes_delimiter(old_nodes, delimiter, text_type):
     new_nodes = []
@@ -48,12 +38,30 @@ def split_nodes_delimiter(old_nodes, delimiter, text_type):
     return new_nodes
 
 
+def generate_html(tokens):
+    html_output = ""
 
-test_text = "Hey **Jere**, are you ready to **code** today?"
-test_text2 = "This **paragraph** tests if *italic* and **bold** chaining works in the code."
+    for token in tokens:
+        if token["type"] == "bold":
+            html_output += "<b>" + token["value"] + "</b>"
+        
+        elif token["type"] == "italic":
+            html_output += "<i>" + token["value"] + "</i>"
 
-step_one_tokens = tokenize_text(test_text)
-print("Step one tokens found:", step_one_tokens)
+        else:
+            html_output += token["value"]
+    
+    return html_output
 
-final_result = generate_html(extracted_tokens)
-print("HTML ready output: ", final_result)
+
+# test_text = "Hey **Jere**, are you ready to **code** today?"
+test_text2 = "This **paragraph** tests if *italic* and bold chaining works in the code."
+
+step_one_tokens = tokenize_text(test_text2)
+print("Step one (Bolds) found:", step_one_tokens)
+
+step_two_tokens = split_nodes_delimiter(step_one_tokens, "*", "italic")
+print("Step two (Cursives) found:", step_two_tokens)
+
+final_html = generate_html(step_two_tokens)
+print("HTML ready output: ", final_html)
