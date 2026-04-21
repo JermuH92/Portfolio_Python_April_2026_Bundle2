@@ -25,13 +25,35 @@ def generate_html(tokens):
     
     return html_output
 
+def split_nodes_delimiter(old_nodes, delimiter, text_type):
+    new_nodes = []
+
+    for token in old_nodes:
+        if token["type"] != "text":
+            new_nodes.append(token)
+            continue
+
+        current_text = token["value"]
+        split_text = current_text.split(delimiter)
+
+        for index, value in enumerate(split_text):
+            if value == "":
+                continue
+
+            if index % 2 == 0:
+                new_nodes.append({"type": "text", "value": value})
+            else:
+                new_nodes.append({"type": text_type, "value": value})
+    
+    return new_nodes
 
 
 
 test_text = "Hey **Jere**, are you ready to **code** today?"
+test_text2 = "This **paragraph** tests if *italic* and **bold** chaining works in the code."
 
-extracted_tokens = tokenize_text(test_text)
-print("Tokens:", extracted_tokens)
+step_one_tokens = tokenize_text(test_text)
+print("Step one tokens found:", step_one_tokens)
 
 final_result = generate_html(extracted_tokens)
 print("HTML ready output: ", final_result)
