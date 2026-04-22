@@ -16,16 +16,24 @@ def create_store():
 
 
     def complete_task(task_id):
+
         for task in tasks:
             if task["id"] == task_id:
                 task["completed"] = True
 
+    def remove_task(task_id):
+        
+        for task in tasks:
+            if task["id"] == task_id:
+                tasks.remove(task)
+                break
 
     return {
 
         "get": get_tasks,
-        "add": add_task,
-        "complete": complete_task
+        "add": add_task,        
+        "complete": complete_task,
+        "remove": remove_task
 
     }
 
@@ -39,5 +47,6 @@ my_store["add"]("Practice closures")
 
 my_store["complete"](1)
 my_store["complete"](2)
+my_store["remove"](2)
 
 print(my_store["get"]())
