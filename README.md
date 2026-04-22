@@ -6,3 +6,5 @@ Project Two: Functional Data Pipeline (focusing on pure functions, 1st class fun
 Completed April 20th
 
 Project Three : Functional Markdown Parser - Completed April 22nd
+
+Project Four: CLI Task Engine - Completed April 23rd
