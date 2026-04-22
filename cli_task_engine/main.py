@@ -50,34 +50,57 @@ def create_router(store):
 
     def handle_command(command, argument=None):
 
-        if command not in routes:
-            print(f"Unknown command {command}")
+            if command not in routes:
+                return f"Unknown command '{command}'"
 
-        if command == "get":
-            return routes[command]()  
+            if command == "get":
+                return routes[command]()  
 
-        else:
-            return routes[command](argument) 
-                
-
-          
+            else:
+                return routes[command](argument) 
+                          
     return handle_command
 
+
+
+def run_cli(router):
+    print("***** Welcome to CLI Task Engine *****\n")
+    print("Type 'quit' to exit.")
+
+    while True:
+        user_input = input("> ").strip()
+
+        if not user_input:
+            continue
+
+        if user_input.lower() == "quit":
+            print("Goodbye.")
+            break
+
+        input_split = user_input.split(" ", 1)
+        command = input_split[0]
+        
+        if len(input_split) > 1:
+            arg = input_split[1]
+
+        else:
+            arg = None
+
+        if arg is not None and (command == "complete" or command == "remove"):
+            arg = int(arg)
+        
+        result = router(command, arg)
+
+        if result is not None:
+            print(result)
+
+
+
 def main():
+
     my_store = create_store()
-
     app_router = create_router(my_store)
-
-    app_router("add", "Buy soda")
-    app_router("add", "Build an app router")
-    app_router("add", "Test the router")
-    app_router("remove", 2)
-    app_router("complete", 1)
-    app_router("add", "Test for increments")
-
-
-
-    print(app_router("get"))
+    run_cli(app_router)
 
 if __name__ == "__main__":
     main()
