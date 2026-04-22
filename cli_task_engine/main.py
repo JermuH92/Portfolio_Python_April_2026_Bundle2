@@ -16,12 +16,16 @@ def create_store():
         tasks.append(new_task_dict)
         next_id = next_id + 1
 
+        return f"---TASK ADDED: '{task_name}' (ID: {new_task_dict['id']})"
+
 
     def complete_task(task_id):
 
         for task in tasks:
             if task["id"] == task_id:
                 task["completed"] = True
+        
+        return f"---TASK COMPLETED (ID:'{task_id}')"
 
     def remove_task(task_id):
 
@@ -29,6 +33,8 @@ def create_store():
             if task["id"] == task_id:
                 tasks.remove(task)
                 break
+
+        return f"---TASK REMOVED (ID:'{task_id}')"
 
     return {
 
@@ -64,7 +70,7 @@ def create_router(store):
 
 
 def run_cli(router):
-    print("***** Welcome to CLI Task Engine *****\n")
+    print("***** Welcome to CLI Task Engine *****")
     print("Type 'quit' to exit.")
 
     while True:
