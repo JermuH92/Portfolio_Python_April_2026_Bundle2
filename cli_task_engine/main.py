@@ -39,19 +39,45 @@ def create_store():
 
     }
 
+def create_router(store):
 
-    
+    routes = {
+        "get": store["get"],
+        "add": store["add"],
+        "complete": store["complete"],
+        "remove": store["remove"],
+    }
 
-my_store = create_store()
-my_store["add"]("Buy soda")
-my_store["add"]("Code a database")
-my_store["add"]("Practice closures")
+    def handle_command(command, argument=None):
 
-my_store["complete"](1)
-my_store["complete"](2)
-my_store["remove"](2)
-my_store["add"]("BugTest")
-my_store["remove"](1)
-my_store["add"]("CheckIDIncrement")
+        if command not in routes:
+            print(f"Unknown command {command}")
 
-print(my_store["get"]())
+        if command == "get":
+            return routes[command]()  
+
+        else:
+            return routes[command](argument) 
+                
+
+          
+    return handle_command
+
+def main():
+    my_store = create_store()
+
+    app_router = create_router(my_store)
+
+    app_router("add", "Buy soda")
+    app_router("add", "Build an app router")
+    app_router("add", "Test the router")
+    app_router("remove", 2)
+    app_router("complete", 1)
+    app_router("add", "Test for increments")
+
+
+
+    print(app_router("get"))
+
+if __name__ == "__main__":
+    main()
