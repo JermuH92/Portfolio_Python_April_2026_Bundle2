@@ -1,12 +1,32 @@
+import json
+
 def create_database(filename="database.json"):
     tables = {}
     counters = {}
 
+    try:
+        with open(filename, "r") as file:
+            db_state = json.load(file)
+            tables = db_state["tables"]
+            counters = db_state["counters"]
+
+    except FileNotFoundError:
+        pass
+
+
+    def _save_state():
+        db_state = {"tables": tables, "counters": counters}
+
+        with open(filename, "w") as file:
+            json.dump(db_state, file)
+
+
     def create_table(table_name):
         tables[table_name] = []
         counters[table_name] = 1
-        
-    
+        _save_state()
+
+
     def insert(table_name, record):
 
         if table_name not in tables:
@@ -17,7 +37,9 @@ def create_database(filename="database.json"):
         counters[table_name] += 1
 
         tables[table_name].append(record)
+        _save_state()
         return f"Record inserted into{table_name}"
+
 
     def find_by_id(table_name, record_id):
 
@@ -29,7 +51,8 @@ def create_database(filename="database.json"):
                 return record
             
         return None
-    
+
+
     def find_by(table_name, condition_func):
         
         if table_name not in tables:
@@ -42,7 +65,8 @@ def create_database(filename="database.json"):
                 results.append(record)
 
         return results
-    
+
+
     def update_by_id(table_name, record_id, updates):
 
         if table_name not in tables:
@@ -54,9 +78,10 @@ def create_database(filename="database.json"):
             return f"Error: {table_name} with {record_id} does not exist"
 
         record_to_update.update(updates)
-
+        _save_state()
         return f"Record {record_id} UPDATED successfully."
-    
+
+
     def delete_by_id(table_name, record_id):
 
         if table_name not in tables:
@@ -68,7 +93,7 @@ def create_database(filename="database.json"):
             return f"Error: {table_name} with {record_id} does not exist"
         
         tables[table_name].remove(record_to_delete)
-
+        _save_state()
         return f"Record {record_id} DELETED successfully."
         
         
@@ -85,15 +110,5 @@ def create_database(filename="database.json"):
     }
 
 
-
 my_db = create_database()
-my_db["create_table"]("users")
-my_db["create_table"]("products")
-
-my_db["insert"]("users", {"name": "John", "age": 49})
-my_db["insert"]("users", {"name": "Hans", "age": 52})
-my_db["insert"]("users", {"name": "Holly", "age": 48})
-my_db["insert"]("users", {"name": "Lucy", "age": 6})
-my_db["insert"]("products", {"name": "Coffee", "price": 2.50})
-
 print(my_db["get_all"]())
