@@ -1,5 +1,6 @@
 def create_database():
     tables = {}
+    counters = {}
 
     def create_table(table_name):
         tables[table_name] = []
@@ -37,7 +38,36 @@ def create_database():
                 results.append(record)
 
         return results
+    
+    def update_by_id(table_name, record_id, updates):
 
+        if table_name not in tables:
+            return f"Error: Table '{table_name} does not exist."
+        
+        record_to_update = find_by_id(table_name, record_id)
+
+        if record_to_update is None:
+            return f"Error: {table_name} with {record_id} does not exist"
+
+        record_to_update.update(updates)
+
+        return f"Record {record_id} UPDATED successfully."
+    
+    def delete_by_id(table_name, record_id):
+
+        if table_name not in tables:
+            return f"Error: Table '{table_name} does not exist."
+        
+        record_to_delete = find_by_id(table_name, record_id)
+
+        if record_to_delete is None:
+            return f"Error: {table_name} with {record_id} does not exist"
+        
+        tables[table_name].remove(record_to_delete)
+
+        return f"Record {record_id} DELETED successfully."
+        
+        
 
 
     return {
@@ -45,7 +75,9 @@ def create_database():
         "insert": insert,
         "get_all": lambda: tables,
         "find_by_id": find_by_id,
-        "find_by": find_by
+        "find_by": find_by,
+        "update_by_id": update_by_id,
+        "delete_by_id": delete_by_id
     }
 
 
@@ -60,10 +92,8 @@ my_db["insert"]("users", {"id": 2, "name": "Hans", "age": 52})
 my_db["insert"]("users", {"id": 3, "name": "Holly", "age": 48})
 my_db["insert"]("users", {"id": 4, "name": "Lucy", "age": 6})
 
-result = my_db["find_by_id"]("users", 1)
-print("Found user", result)
+delete_result = my_db["delete_by_id"]("users", 2)
+print(delete_result)
 
-adult_users = my_db["find_by"]("users", lambda user: user.get("age", 0) >= 18)
-print("Adult users:", adult_users)
 
-print(my_db["get_all"]())
+print("Database after removal:", my_db["get_all"]())
