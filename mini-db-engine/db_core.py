@@ -1,18 +1,22 @@
-def create_database():
+def create_database(filename="database.json"):
     tables = {}
     counters = {}
 
     def create_table(table_name):
         tables[table_name] = []
+        counters[table_name] = 1
         
     
     def insert(table_name, record):
 
         if table_name not in tables:
             return f"Error: Table '{table_name}' does not exist."
+        
+        fetch_id = counters[table_name]
+        record["id"] = fetch_id
+        counters[table_name] += 1
 
         tables[table_name].append(record)
-
         return f"Record inserted into{table_name}"
 
     def find_by_id(table_name, record_id):
@@ -86,14 +90,10 @@ my_db = create_database()
 my_db["create_table"]("users")
 my_db["create_table"]("products")
 
-my_db["insert"]("users", {"id": 1, "name": "John", "age": 49})
-my_db["insert"]("products", {"id": 101, "name": "Coffee"})
-my_db["insert"]("users", {"id": 2, "name": "Hans", "age": 52})
-my_db["insert"]("users", {"id": 3, "name": "Holly", "age": 48})
-my_db["insert"]("users", {"id": 4, "name": "Lucy", "age": 6})
+my_db["insert"]("users", {"name": "John", "age": 49})
+my_db["insert"]("users", {"name": "Hans", "age": 52})
+my_db["insert"]("users", {"name": "Holly", "age": 48})
+my_db["insert"]("users", {"name": "Lucy", "age": 6})
+my_db["insert"]("products", {"name": "Coffee", "price": 2.50})
 
-delete_result = my_db["delete_by_id"]("users", 2)
-print(delete_result)
-
-
-print("Database after removal:", my_db["get_all"]())
+print(my_db["get_all"]())
