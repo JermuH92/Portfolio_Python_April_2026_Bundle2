@@ -1,4 +1,6 @@
 import json
+from router import create_router
+from cli import run_cli
 
 def create_database(filename="database.json"):
     tables = {}
@@ -110,5 +112,14 @@ def create_database(filename="database.json"):
     }
 
 
-my_db = create_database()
-print(my_db["get_all"]())
+def main():
+
+    my_db = create_database()
+
+    app_router = create_router(my_db)
+
+    run_cli(app_router)
+
+if __name__ == "__main__":
+    main()
+
