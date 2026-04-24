@@ -1,1 +1,0 @@
-{"tables": {"users": [{"name": "John", "age": 49, "id": 1}, {"name": "Hans", "age": 52, "id": 2}, {"name": "Holly", "age": 48, "id": 3}, {"name": "Lucy", "age": 6, "id": 4}], "products": [{"name": "Coffee", "price": 2.5, "id": 1}], "cards": [{"name": "Ace", "id": 1}]}, "counters": {"users": 5, "products": 2, "cards": 2}}
