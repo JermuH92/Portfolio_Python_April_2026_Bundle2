@@ -26,7 +26,7 @@ Data processing utility that transforms strings through a custom recursive pipel
 ### 8. Functional Markdown Parser
 A text parsing engine designed to convert Markdown syntax into HTML. Instead of relying on complex object-oriented state machines, it utilizes strict functional rules, an AST-like node structure, and data pipelines to process text blocks.
 
-* **Concepts solidified:** Concepts solidified: Advanced string manipulation, pure functions, Abstract Syntax Tree (AST) concepts, and functional data transformation.
+* **Concepts solidified:** Advanced string manipulation, pure functions, Abstract Syntax Tree (AST) concepts, and functional data transformation.
 
 ### 9. CLI Task Engine
 A command-line task management tool with a fully separated architecture and permanent data storage.
